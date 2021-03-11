@@ -23,15 +23,15 @@ exports.postAceInit = (hook, context) => {
 
             // seems messy but basically this is required to know if we're
             // following a previous attribute
-            let isApplied;
-            if (rep.selStart[1] !== 1) {
-              isApplied = ace.ace_getAttributeOnSelection(attribute, true);
+            const chars = rep.selStart[1];
+            const isApplied = ace.ace_getAttributeOnSelection(attribute, true);
+            if (chars > rep.selStart[1]) {
+              rep.selStart[1] += 1;
+              rep.selEnd[1] = rep.selStart[1]; // make sure we don't select an area
             }
-            const isFirstCharacter = (rep.selStart[1] === 0);
-            if (!isFirstCharacter) rep.selStart[1] += 1;
 
             // Append a hidden character the current caret position
-            ace.ace_replaceRange(rep.selStart, rep.selEnd, 'V');
+            ace.ace_replaceRange(rep.selStart, rep.selEnd, ' ');
 
             rep.selStart[1] -= 1; // overwrite the secret hidden character
 
@@ -56,7 +56,7 @@ exports.aceAttribsToClasses = (hook, context) => {
   }
 };
 
-exports.aceKeyEvent = (hook, callstack) => {
+exports.aceKeyEvent = (hook, callstack, cb) => {
   const evt = callstack.evt;
   const k = evt.keyCode;
   const isAttributeKey = (
@@ -92,7 +92,7 @@ const checkAttr = (context, documentAttributeManager) => {
 };
 
 
-exports.aceEditEvent = (hook, context) => {
+exports.aceEditEvent = (hook, context, cb) => {
   const call = context.callstack;
   const documentAttributeManager = context.documentAttributeManager;
   const padeditor = require('ep_etherpad-lite/static/js/pad_editor').padeditor;
@@ -157,4 +157,4 @@ exports.aceEditEvent = (hook, context) => {
   return cb();
 };
 
-exports.aceEditorCSS = (hookName) => ['/ep_sticky_attributes/static/css/ace.css'];
+exports.aceEditorCSS = (hookName, cb) => ['/ep_sticky_attributes/static/css/ace.css'];
