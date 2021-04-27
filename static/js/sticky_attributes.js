@@ -106,7 +106,7 @@ const checkAttr = (context, documentAttributeManager) => {
     if (rep.selStart[1] !== 1) {
         $.each(attributes, (k, attribute) => {
             const chars = rep.selStart[1];
-            const isApplied = documentAttributeManager.getAttributeOnSelection(attribute, true);
+            const isApplied = documentAttributeManager.getAttributeOnSelection(attribute, false);
             rep.selStart[1] = chars;
             if (isApplied) {
                 $(`.buttonicon-${attribute}`).parent().addClass('activeButton');
