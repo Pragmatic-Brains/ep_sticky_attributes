@@ -103,7 +103,7 @@ const checkAttr = (context, documentAttributeManager) => {
     const rep = context.rep;
     // seems messy but basically this is required to know if
     // we're following a previous attribute
-    if (rep.selStart[1] !== 1) {
+    
         $.each(attributes, (k, attribute) => {
             const chars = rep.selStart[1];
             const isApplied = documentAttributeManager.getAttributeOnSelection(attribute, true);
@@ -114,7 +114,7 @@ const checkAttr = (context, documentAttributeManager) => {
                 $(`.buttonicon-${attribute}`).parent().removeClass('activeButton');
             }
         });
-    }
+    
 };
 
 
